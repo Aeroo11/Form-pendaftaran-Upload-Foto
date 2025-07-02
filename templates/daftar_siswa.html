@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Siswa Terdaftar - Tech Edition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="daftar-header">
+            <h1>★ DAFTAR SISWA TERDAFTAR ★</h1>
+        </div>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="button-container">
+            <a href="/" class="retro-button">← Kembali ke Beranda</a>
+            <a href="/" class="retro-button">+ Tambah Siswa Baru</a>
+        </div>
+        
+        <div class="data-table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Foto</th>
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Agama</th>
+                        <th>Sekolah Asal</th>
+                        <th>Tanggal Daftar</th>
+                        <th>Tindakan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for siswa in siswa_list %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="photo-cell">
+                            <img src="{{ url_for('static', filename='uploads/' + siswa.foto) }}" alt="Foto {{ siswa.nama_lengkap }}">
+                        </td>
+                        <td>{{ siswa.nama_lengkap }}</td>
+                        <td>{{ siswa.alamat }}</td>
+                        <td>{{ siswa.jenis_kelamin }}</td>
+                        <td>{{ siswa.agama|default('Islam') }}</td>
+                        <td>{{ siswa.asal_sekolah }}</td>
+                        <td>{{ siswa.waktu_daftar }}</td>
+                        <td class="actions-cell">
+                            <a href="/edit-siswa/{{ siswa.id }}" class="action-btn edit-btn">Edit</a>
+                            <a href="/hapus-siswa/{{ siswa.id }}" class="action-btn delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">Hapus</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="total-counter">
+            Total: {{ siswa_list|length }} siswa
+        </div>
+        
+        <footer>
+            <div class="retro-line"></div>
+            <p>© 2023 Universitas Teknologi Indonesia</p>
+            <p class="copyright-text">Current Time: {{ current_time }}</p>
+        </footer>
+    </div>
+</body>
+</html>
